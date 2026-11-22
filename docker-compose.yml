@@ -1,0 +1,27 @@
+services:
+  db:
+    image: mariadb:11
+    container_name: reza_ahmad_jahid_db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root123
+      MARIADB_DATABASE: db_reza_ahmad_jahid
+      MARIADB_USER: reza
+      MARIADB_PASSWORD: reza123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  api:
+    build: .
+    container_name: reza_ahmad_jahid_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=mysql+pymysql://reza:reza123@db:3306/db_reza_ahmad_jahid
+
+volumes:
+  mariadb_data:
